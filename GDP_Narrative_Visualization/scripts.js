@@ -1,3 +1,4 @@
+// Load the preprocessed data
 d3.csv("gdp_data_preprocessed.csv").then(function(data) {
     console.log("Data loaded: ", data);
 
@@ -58,8 +59,8 @@ d3.csv("gdp_data_preprocessed.csv").then(function(data) {
     const scenes = [
         { title: "Global GDP Growth Rate Over Time", filter: d => d['Country Name'] === "World" },
         { title: "GDP Growth Rate in USA", filter: d => d['Country Name'] === "United States" },
-        { title: "GDP Growth Rate in Russia", filter: d => d['Country Name'] === "Russian Federation" },
         { title: "GDP Growth Rate in China", filter: d => d['Country Name'] === "China" },
+        { title: "GDP Growth Rate in Indonesia", filter: d => d['Country Name'] === "Indonesia" },
         { title: "Select a Country", filter: null }
     ];
 
@@ -67,8 +68,15 @@ d3.csv("gdp_data_preprocessed.csv").then(function(data) {
         "World": "green",
         "United States": "blue",
         "China": "red",
-        "Russian Federation": "orange",
+        "Indonesia": "orange",
         "User": "purple"
+    };
+
+    const countryCodes = {
+        "World": "WLD",
+        "United States": "USA",
+        "China": "CHN",
+        "Indonesia": "IDN"
     };
 
     function showScene(sceneIndex) {
@@ -90,7 +98,11 @@ d3.csv("gdp_data_preprocessed.csv").then(function(data) {
         const tooltip = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
-            .html(d => `<strong>Year:</strong> <span style='color:red'>${d.Year}</span><br><strong>Value:</strong> <span style='color:red'>${d.Value}</span>`);
+            .html(d => `<div style='background: white; padding: 5px; border: 1px solid black; border-radius: 5px; color: black;'>
+                        <strong>Year:</strong> ${d.Year}<br>
+                        <strong>Value:</strong> ${d.Value.toFixed(2)}%<br>
+                        <strong>Country Code:</strong> ${d['Country Code'] || countryCodes[d['Country Name']] || 'N/A'}
+                        </div>`);
 
         svg.call(tooltip);
 
@@ -174,6 +186,7 @@ d3.csv("gdp_data_preprocessed.csv").then(function(data) {
                 .text(d => d.key);
         }
 
+        // Create legend
         const legend = d3.select("#controls").append("div").attr("id", "legend");
 
         const legendData = scene.filter ? 
