@@ -1,4 +1,3 @@
-// Load the preprocessed data
 d3.csv("gdp_data_preprocessed.csv").then(function(data) {
     console.log("Data loaded: ", data);
 
@@ -186,7 +185,6 @@ d3.csv("gdp_data_preprocessed.csv").then(function(data) {
                 .text(d => d.key);
         }
 
-        // Create legend
         const legend = d3.select("#controls").append("div").attr("id", "legend");
 
         const legendData = scene.filter ? 
